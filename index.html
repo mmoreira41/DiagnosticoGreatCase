@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagnóstico Estratégico — GreatCase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:       #1E00FF;
+      --blue-hover: #1700e0;
+      --blue-light: #EEF0FF;
+      --blue-mid:   #C7CAFF;
+      --white:      #FFFFFF;
+      --gray-50:    #F9FAFB;
+      --gray-100:   #F3F4F6;
+      --gray-200:   #E5E7EB;
+      --gray-300:   #D1D5DB;
+      --gray-400:   #9CA3AF;
+      --gray-500:   #6B7280;
+      --gray-900:   #111827;
+      --red:        #EF4444;
+      --font-d: 'Syne', sans-serif;
+      --font-b: 'Instrument Sans', sans-serif;
+      --r:  8px;
+      --r2: 12px;
+      --trans: 0.18s ease-out;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-b);
+      background: var(--white);
+      color: var(--gray-900);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px 80px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 100% 50% at 50% -10%, rgba(30,0,255,.055) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .form-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    /* ── Brand header ── */
+    .brand-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+    .brand-mark {
+      width: 30px; height: 30px;
+      background: var(--blue);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .brand-name {
+      font-family: var(--font-d);
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 36px;
+    }
+    .progress-segment {
+      flex: 1; height: 3px;
+      border-radius: 99px;
+      background: var(--gray-200);
+      transition: background 0.4s ease;
+      overflow: hidden;
+      position: relative;
+    }
+    .progress-segment.active { background: var(--blue); }
+    .progress-segment.active::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.55) 50%, transparent 100%);
+      animation: shimmer 1.4s ease infinite;
+    }
+    @keyframes shimmer {
+      from { transform: translateX(-100%); }
+      to   { transform: translateX(200%); }
+    }
+
+    /* ── Steps ── */
+    .step { display: none; }
+    .step.active {
+      display: block;
+      animation: stepIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    @keyframes stepIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Step header ── */
+    .step-eyebrow {
+      font-family: var(--font-d);
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    .step-title {
+      font-family: var(--font-d);
+      font-size: clamp(20px, 5vw, 26px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+    .step-subtitle {
+      font-size: 14px;
+      color: var(--gray-500);
+      line-height: 1.55;
+      margin-bottom: 28px;
+    }
+
+    /* ── Field ── */
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block;
+      font-family: var(--font-d);
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-bottom: 7px;
+    }
+    .field label .hint {
+      font-family: var(--font-b);
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      font-size: 11px;
+      color: var(--gray-400);
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="url"],
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--r);
+      font-family: var(--font-b);
+      font-size: 15px;
+      color: var(--gray-900);
+      background: var(--white);
+      transition: border-color var(--trans), box-shadow var(--trans);
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    input:focus, select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(30,0,255,.1);
+    }
+    input.has-error, select.has-error { border-color: var(--red); }
+    input::placeholder { color: var(--gray-400); }
+    input:disabled {
+      background: var(--gray-100);
+      color: var(--gray-400);
+      cursor: not-allowed;
+      border-color: var(--gray-200);
+    }
+
+    .field-error {
+      font-size: 12px;
+      color: var(--red);
+      margin-top: 5px;
+      display: none;
+    }
+    .field-error.show { display: block; }
+
+    /* ── Checkbox ── */
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 6px;
+    }
+    .check-row input[type="checkbox"] {
+      width: 16px; height: 16px;
+      border-radius: 4px;
+      accent-color: var(--blue);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .check-row span { font-size: 13.5px; color: var(--gray-600); }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: var(--gray-200); margin: 22px 0; }
+
+    /* ── Multi-select cards ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .card-opt {
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--r);
+      padding: 11px 13px;
+      cursor: pointer;
+      transition: border-color var(--trans), background var(--trans), transform 0.1s ease;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .card-opt:active { transform: scale(0.96); }
+    .card-opt .ico { font-size: 16px; flex-shrink: 0; }
+    .card-opt .lbl { font-size: 13px; font-weight: 500; color: var(--gray-900); line-height: 1.3; }
+    .card-opt.selected {
+      border-color: var(--blue);
+      background: var(--blue-light);
+    }
+    .card-opt.selected .lbl { color: var(--blue); }
+
+    /* ── Radio cards ── */
+    .radio-card {
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--r);
+      padding: 13px 15px;
+      cursor: pointer;
+      transition: border-color var(--trans), background var(--trans), transform 0.1s ease;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 8px;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .radio-card:last-child { margin-bottom: 0; }
+    .radio-card:active { transform: scale(0.99); }
+    .radio-dot {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--gray-300);
+      flex-shrink: 0;
+      transition: border-color var(--trans), background var(--trans);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .radio-dot::after {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--white);
+      opacity: 0;
+      transition: opacity var(--trans);
+    }
+    .radio-card.selected .radio-dot {
+      border-color: var(--blue);
+      background: var(--blue);
+    }
+    .radio-card.selected .radio-dot::after { opacity: 1; }
+    .radio-card.selected { border-color: var(--blue); background: var(--blue-light); }
+    .radio-body { flex: 1; }
+    .radio-lbl { font-size: 14px; font-weight: 500; color: var(--gray-900); }
+    .radio-card.selected .radio-lbl { color: var(--blue); }
+    .radio-desc { font-size: 12px; color: var(--gray-400); margin-top: 1px; }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      width: 100%;
+      padding: 14px 20px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: var(--r);
+      font-family: var(--font-d);
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background var(--trans), transform 0.1s ease, box-shadow var(--trans);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-primary:hover { background: var(--blue-hover); box-shadow: 0 4px 16px rgba(30,0,255,.22); }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-ghost {
+      background: none; border: none;
+      color: var(--gray-500);
+      font-family: var(--font-b);
+      font-size: 13px; font-weight: 500;
+      cursor: pointer;
+      padding: 10px 0;
+      display: flex; align-items: center; gap: 5px;
+      transition: color var(--trans);
+      white-space: nowrap;
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-ghost:hover { color: var(--gray-900); }
+
+    .btn-row { display: flex; flex-direction: column; gap: 10px; margin-top: 28px; }
+    .btn-row-inline {
+      display: flex; align-items: center; gap: 12px;
+      margin-top: 28px;
+    }
+    .btn-row-inline .btn-primary { flex: 1; }
+
+    /* ── Review ── */
+    .review-grid { display: grid; gap: 10px; }
+    .review-item {
+      padding: 11px 14px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--r);
+    }
+    .review-lbl {
+      font-family: var(--font-d);
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 2px;
+    }
+    .review-val { font-size: 14px; font-weight: 500; color: var(--gray-900); }
+
+    /* ── Confirmation ── */
+    .confirm-icon {
+      width: 64px; height: 64px;
+      background: var(--blue-light);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 22px;
+      animation: popIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.4); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .confirm-title {
+      font-family: var(--font-d);
+      font-size: clamp(22px, 5.5vw, 28px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .confirm-sub {
+      font-size: 14px; color: var(--gray-500);
+      text-align: center; line-height: 1.55;
+      margin-bottom: 28px;
+    }
+    .confirm-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--r2);
+      padding: 18px 20px;
+    }
+    .confirm-card-ttl {
+      font-family: var(--font-d);
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-bottom: 14px;
+    }
+    .confirm-steps { display: flex; flex-direction: column; gap: 12px; }
+    .confirm-step {
+      display: flex; align-items: flex-start; gap: 11px;
+      font-size: 13.5px; color: var(--gray-600); line-height: 1.45;
+    }
+    .confirm-num {
+      width: 20px; height: 20px;
+      background: var(--blue); color: #fff;
+      font-family: var(--font-d);
+      font-size: 10px; font-weight: 700;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 420px) {
+      body { padding: 24px 14px 60px; }
+      .step-title { font-size: 20px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .brand-header { margin-bottom: 28px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="form-wrapper">
+
+  <!-- Brand -->
+  <div class="brand-header">
+    <div class="brand-mark">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M2 8.5L6 12.5L14 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="brand-name">GreatCase</span>
+  </div>
+
+  <!-- Progress (5 segments) -->
+  <div class="progress-bar" id="progressBar">
+    <div class="progress-segment active"></div>
+    <div class="progress-segment"></div>
+    <div class="progress-segment"></div>
+    <div class="progress-segment"></div>
+    <div class="progress-segment"></div>
+  </div>
+
+  <!-- ══════════ PASSO 1 — Contato ══════════ -->
+  <div class="step active" id="step1">
+    <p class="step-eyebrow">Passo 1 de 5</p>
+    <h1 class="step-title">Quem é você?</h1>
+    <p class="step-subtitle">Vamos começar com suas informações de contato para personalizar seu diagnóstico.</p>
+
+    <div class="field">
+      <label for="nome">Nome completo</label>
+      <input type="text" id="nome" placeholder="Ex: Ana Souza" autocomplete="name" />
+      <div class="field-error" id="err-nome">Por favor, insira seu nome.</div>
+    </div>
+
+    <div class="field">
+      <label for="telefone">WhatsApp</label>
+      <input type="tel" id="telefone" placeholder="(00) 00000-0000" maxlength="15" autocomplete="tel" inputmode="numeric" />
+      <div class="field-error" id="err-telefone">Por favor, insira um número válido.</div>
+    </div>
+
+    <div class="field">
+      <label for="empresa">Nome da empresa</label>
+      <input type="text" id="empresa" placeholder="Ex: Studio Creative" autocomplete="organization" />
+      <div class="field-error" id="err-empresa">Por favor, insira o nome da empresa.</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="goStep(1,2)">Avançar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ PASSO 2 — Contexto digital ══════════ -->
+  <div class="step" id="step2">
+    <p class="step-eyebrow">Passo 2 de 5</p>
+    <h1 class="step-title">Contexto digital</h1>
+    <p class="step-subtitle">Nos fale sobre sua presença online e seu papel na empresa.</p>
+
+    <div class="field">
+      <label for="site">Site ou link da empresa</label>
+      <input type="url" id="site" placeholder="https://seusite.com.br" autocomplete="url" inputmode="url" />
+      <div class="field-error" id="err-site">Insira um site ou marque a opção abaixo.</div>
+    </div>
+
+    <label class="check-row" style="margin-top:-4px; margin-bottom:2px;">
+      <input type="checkbox" id="semSite" onchange="toggleSite(this)" />
+      <span>Ainda não tenho site</span>
+    </label>
+
+    <div class="divider"></div>
+
+    <div class="field">
+      <label>Qual é o seu cargo? <span class="hint">(pode marcar mais de um)</span></label>
+      <div class="cards-grid" id="cargoCards">
+        <div class="card-opt" onclick="toggleMulti(this,'cargo')" data-value="Fundador/CEO">
+          <span class="ico">👑</span><span class="lbl">Fundador / CEO</span>
+        </div>
+        <div class="card-opt" onclick="toggleMulti(this,'cargo')" data-value="Marketing">
+          <span class="ico">📣</span><span class="lbl">Marketing</span>
+        </div>
+        <div class="card-opt" onclick="toggleMulti(this,'cargo')" data-value="Vendas">
+          <span class="ico">🤝</span><span class="lbl">Vendas</span>
+        </div>
+        <div class="card-opt" onclick="toggleMulti(this,'cargo')" data-value="Operações">
+          <span class="ico">⚙️</span><span class="lbl">Operações</span>
+        </div>
+        <div class="card-opt" onclick="toggleMulti(this,'cargo')" data-value="TI/Tecnologia">
+          <span class="ico">💻</span><span class="lbl">TI / Tecnologia</span>
+        </div>
+        <div class="card-opt" onclick="toggleMulti(this,'cargo')" data-value="Outro">
+          <span class="ico">👤</span><span class="lbl">Outro</span>
+        </div>
+      </div>
+      <div class="field-error" id="err-cargo">Selecione ao menos um cargo.</div>
+    </div>
+
+    <div class="btn-row-inline">
+      <button class="btn-ghost" onclick="goStep(2,1)">← Voltar</button>
+      <button class="btn-primary" onclick="goStep(2,3)">Avançar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ PASSO 3 — Porte ══════════ -->
+  <div class="step" id="step3">
+    <p class="step-eyebrow">Passo 3 de 5</p>
+    <h1 class="step-title">Porte da empresa</h1>
+    <p class="step-subtitle">Quantas pessoas trabalham na sua empresa ou equipe?</p>
+
+    <div id="porteCards">
+      <div class="radio-card" onclick="selectRadio(this,'porte')" data-value="Solo / MEI">
+        <div class="radio-dot"></div>
+        <div class="radio-body">
+          <div class="radio-lbl">Solo / MEI</div>
+          <div class="radio-desc">Apenas eu</div>
+        </div>
+      </div>
+      <div class="radio-card" onclick="selectRadio(this,'porte')" data-value="2–10 pessoas">
+        <div class="radio-dot"></div>
+        <div class="radio-body">
+          <div class="radio-lbl">2–10 pessoas</div>
+          <div class="radio-desc">Pequena equipe</div>
+        </div>
+      </div>
+      <div class="radio-card" onclick="selectRadio(this,'porte')" data-value="11–50 pessoas">
+        <div class="radio-dot"></div>
+        <div class="radio-body">
+          <div class="radio-lbl">11–50 pessoas</div>
+          <div class="radio-desc">Empresa em crescimento</div>
+        </div>
+      </div>
+      <div class="radio-card" onclick="selectRadio(this,'porte')" data-value="51–200 pessoas">
+        <div class="radio-dot"></div>
+        <div class="radio-body">
+          <div class="radio-lbl">51–200 pessoas</div>
+          <div class="radio-desc">Empresa média</div>
+        </div>
+      </div>
+      <div class="radio-card" onclick="selectRadio(this,'porte')" data-value="200+ pessoas">
+        <div class="radio-dot"></div>
+        <div class="radio-body">
+          <div class="radio-lbl">200+ pessoas</div>
+          <div class="radio-desc">Grande empresa</div>
+        </div>
+      </div>
+    </div>
+    <div class="field-error" id="err-porte" style="margin-top:6px;">Selecione o porte da empresa.</div>
+
+    <div class="btn-row-inline">
+      <button class="btn-ghost" onclick="goStep(3,2)">← Voltar</button>
+      <button class="btn-primary" onclick="goStep(3,4)">Avançar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ PASSO 4 — Solução & Desafio ══════════ -->
+  <div class="step" id="step4">
+    <p class="step-eyebrow">Passo 4 de 5</p>
+    <h1 class="step-title">Solução & desafio</h1>
+    <p class="step-subtitle">O que você precisa e qual é o seu maior obstáculo hoje?</p>
+
+    <div class="field">
+      <label>O que você busca?</label>
+      <div class="cards-grid" id="solucaoCards">
+        <div class="card-opt" onclick="selectSingle(this,'solucao')" data-value="Site / Landing Page">
+          <span class="ico">🌐</span><span class="lbl">Site / Landing Page</span>
+        </div>
+        <div class="card-opt" onclick="selectSingle(this,'solucao')" data-value="E-commerce">
+          <span class="ico">🛒</span><span class="lbl">E-commerce</span>
+        </div>
+        <div class="card-opt" onclick="selectSingle(this,'solucao')" data-value="Tráfego Pago">
+          <span class="ico">📈</span><span class="lbl">Tráfego Pago</span>
+        </div>
+        <div class="card-opt" onclick="selectSingle(this,'solucao')" data-value="Identidade Visual">
+          <span class="ico">🎨</span><span class="lbl">Identidade Visual</span>
+        </div>
+        <div class="card-opt" onclick="selectSingle(this,'solucao')" data-value="Estratégia Digital">
+          <span class="ico">🚀</span><span class="lbl">Estratégia Digital</span>
+        </div>
+        <div class="card-opt" onclick="selectSingle(this,'solucao')" data-value="Outro">
+          <span class="ico">✨</span><span class="lbl">Outro</span>
+        </div>
+      </div>
+      <div class="field-error" id="err-solucao">Selecione uma solução.</div>
+    </div>
+
+    <div class="field" style="margin-top:20px;">
+      <label for="desafio">Principal desafio</label>
+      <select id="desafio">
+        <option value="" disabled selected>Selecione seu maior desafio</option>
+        <option value="Baixa visibilidade online">Baixa visibilidade online</option>
+        <option value="Poucas conversões / vendas">Poucas conversões / vendas</option>
+        <option value="Processos manuais / falta de automação">Processos manuais / falta de automação</option>
+        <option value="Presença fraca nas redes sociais">Presença fraca nas redes sociais</option>
+        <option value="Posicionamento e identidade de marca">Posicionamento e identidade de marca</option>
+      </select>
+      <div class="field-error" id="err-desafio">Selecione um desafio.</div>
+    </div>
+
+    <div class="btn-row-inline">
+      <button class="btn-ghost" onclick="goStep(4,3)">← Voltar</button>
+      <button class="btn-primary" onclick="goStep(4,5)">Avançar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ PASSO 5 — Urgência & Origem ══════════ -->
+  <div class="step" id="step5">
+    <p class="step-eyebrow">Passo 5 de 5</p>
+    <h1 class="step-title">Urgência & origem</h1>
+    <p class="step-subtitle">Quando você precisa agir e como chegou até nós?</p>
+
+    <div class="field">
+      <label>Quando você precisa resolver isso?</label>
+      <div id="urgenciaCards">
+        <div class="radio-card" onclick="selectRadio(this,'urgencia')" data-value="Preciso agora (urgente)">
+          <div class="radio-dot"></div>
+          <div class="radio-body">
+            <div class="radio-lbl">Preciso agora</div>
+            <div class="radio-desc">Situação urgente — quero resolver logo</div>
+          </div>
+        </div>
+        <div class="radio-card" onclick="selectRadio(this,'urgencia')" data-value="Em 1 a 3 meses">
+          <div class="radio-dot"></div>
+          <div class="radio-body">
+            <div class="radio-lbl">Em 1 a 3 meses</div>
+            <div class="radio-desc">Estou planejando o próximo passo</div>
+          </div>
+        </div>
+        <div class="radio-card" onclick="selectRadio(this,'urgencia')" data-value="Em 3 a 6 meses">
+          <div class="radio-dot"></div>
+          <div class="radio-body">
+            <div class="radio-lbl">Em 3 a 6 meses</div>
+            <div class="radio-desc">Tenho algum tempo para decidir</div>
+          </div>
+        </div>
+        <div class="radio-card" onclick="selectRadio(this,'urgencia')" data-value="Explorando opções">
+          <div class="radio-dot"></div>
+          <div class="radio-body">
+            <div class="radio-lbl">Explorando opções</div>
+            <div class="radio-desc">Ainda estou pesquisando</div>
+          </div>
+        </div>
+      </div>
+      <div class="field-error" id="err-urgencia">Selecione uma urgência.</div>
+    </div>
+
+    <div class="field" style="margin-top:20px;">
+      <label>Como nos encontrou?</label>
+      <div class="cards-grid" id="origemCards">
+        <div class="card-opt" onclick="selectSingle(this,'origem')" data-value="Google">
+          <span class="ico">🔍</span><span class="lbl">Google</span>
+        </div>
+        <div class="card-opt" onclick="selectSingle(this,'origem')" data-value="Instagram">
+          <span class="ico">📸</span><span class="lbl">Instagram</span>
+        </div>
+        <div class="card-opt" onclick="selectSingle(this,'origem')" data-value="LinkedIn">
+          <span class="ico">💼</span><span class="lbl">LinkedIn</span>
+        </div>
+        <div class="card-opt" onclick="selectSingle(this,'origem')" data-value="Indicação">
+          <span class="ico">💬</span><span class="lbl">Indicação</span>
+        </div>
+        <div class="card-opt" onclick="selectSingle(this,'origem')" data-value="TikTok">
+          <span class="ico">🎵</span><span class="lbl">TikTok</span>
+        </div>
+        <div class="card-opt" onclick="selectSingle(this,'origem')" data-value="Outro">
+          <span class="ico">🌟</span><span class="lbl">Outro</span>
+        </div>
+      </div>
+      <div class="field-error" id="err-origem">Selecione a origem.</div>
+    </div>
+
+    <div class="btn-row-inline">
+      <button class="btn-ghost" onclick="goStep(5,4)">← Voltar</button>
+      <button class="btn-primary" onclick="goStep(5,6)">Revisar →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ PASSO 6 — Revisão ══════════ -->
+  <div class="step" id="step6">
+    <p class="step-eyebrow">Revisão</p>
+    <h1 class="step-title">Confira seus dados</h1>
+    <p class="step-subtitle">Verifique as informações antes de enviar para o WhatsApp.</p>
+
+    <div class="review-grid" id="reviewGrid"></div>
+
+    <div class="btn-row-inline" style="margin-top:24px;">
+      <button class="btn-ghost" onclick="goStep(6,5)">← Voltar</button>
+      <button class="btn-primary" onclick="sendWhatsApp()">✓ Receber Diagnóstico</button>
+    </div>
+  </div>
+
+  <!-- ══════════ PASSO 7 — Confirmação ══════════ -->
+  <div class="step" id="step7">
+    <div style="text-align:center; padding: 16px 0 0;">
+      <div class="confirm-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <path d="M5 14.5L11.5 21L23 8" stroke="#1E00FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h1 class="confirm-title">Diagnóstico recebido!</h1>
+      <p class="confirm-sub">Suas informações foram enviadas com sucesso via WhatsApp. Em breve nossa equipe entra em contato.</p>
+    </div>
+
+    <div class="confirm-card">
+      <p class="confirm-card-ttl">O que acontece agora?</p>
+      <div class="confirm-steps">
+        <div class="confirm-step">
+          <span class="confirm-num">1</span>
+          <span>Nossa equipe analisa seu diagnóstico em até 24h</span>
+        </div>
+        <div class="confirm-step">
+          <span class="confirm-num">2</span>
+          <span>Você recebe uma proposta personalizada no WhatsApp</span>
+        </div>
+        <div class="confirm-step">
+          <span class="confirm-num">3</span>
+          <span>Agendamos uma conversa para alinhar todos os detalhes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /form-wrapper -->
+
+<script>
+  // ── State ─────────────────────────────────────────
+  const s = {
+    nome: '', telefone: '', empresa: '',
+    site: '', semSite: false,
+    cargo: [],
+    porte: '',
+    solucao: '', desafio: '',
+    urgencia: '', origem: ''
+  };
+
+  // ── Progress ──────────────────────────────────────
+  function setProgress(step) {
+    document.querySelectorAll('.progress-segment').forEach((seg, i) => {
+      seg.classList.toggle('active', i < Math.min(step, 5));
+    });
+  }
+
+  // ── Navigation ────────────────────────────────────
+  function goStep(from, to) {
+    if (to > from && !validate(from)) return;
+    save(from);
+    if (to === 6) buildReview();
+    document.getElementById('step' + from).classList.remove('active');
+    document.getElementById('step' + to).classList.add('active');
+    setProgress(Math.min(to, 5));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Save ──────────────────────────────────────────
+  function save(step) {
+    if (step === 1) {
+      s.nome     = g('nome').value.trim();
+      s.telefone = g('telefone').value.trim();
+      s.empresa  = g('empresa').value.trim();
+    } else if (step === 2) {
+      s.site    = g('site').value.trim();
+      s.semSite = g('semSite').checked;
+      s.cargo   = [...qsa('#cargoCards .card-opt.selected')].map(c => c.dataset.value);
+    } else if (step === 3) {
+      const sel = qs('#porteCards .radio-card.selected');
+      s.porte = sel ? sel.dataset.value : '';
+    } else if (step === 4) {
+      const sel = qs('#solucaoCards .card-opt.selected');
+      s.solucao = sel ? sel.dataset.value : '';
+      s.desafio = g('desafio').value;
+    } else if (step === 5) {
+      const selU = qs('#urgenciaCards .radio-card.selected');
+      s.urgencia = selU ? selU.dataset.value : '';
+      const selO = qs('#origemCards .card-opt.selected');
+      s.origem = selO ? selO.dataset.value : '';
+    }
+  }
+
+  // ── Validate ──────────────────────────────────────
+  function validate(step) {
+    let ok = true;
+
+    function show(errId, cond, inputId) {
+      const errEl = g(errId);
+      if (errEl) errEl.classList.toggle('show', cond);
+      if (inputId) { const inp = g(inputId); if (inp) inp.classList.toggle('has-error', cond); }
+      if (cond) ok = false;
+    }
+
+    if (step === 1) {
+      show('err-nome',     !g('nome').value.trim(),                               'nome');
+      show('err-telefone', g('telefone').value.replace(/\D/g,'').length < 10,    'telefone');
+      show('err-empresa',  !g('empresa').value.trim(),                            'empresa');
+    } else if (step === 2) {
+      const noSite = g('semSite').checked;
+      const siteVal = g('site').value.trim();
+      show('err-site',  !noSite && !siteVal, 'site');
+      show('err-cargo', qsa('#cargoCards .card-opt.selected').length === 0, null);
+    } else if (step === 3) {
+      show('err-porte', !qs('#porteCards .radio-card.selected'), null);
+    } else if (step === 4) {
+      show('err-solucao', !qs('#solucaoCards .card-opt.selected'), null);
+      show('err-desafio', !g('desafio').value, 'desafio');
+    } else if (step === 5) {
+      show('err-urgencia', !qs('#urgenciaCards .radio-card.selected'), null);
+      show('err-origem',   !qs('#origemCards .card-opt.selected'), null);
+    }
+
+    return ok;
+  }
+
+  // ── Card interactions ─────────────────────────────
+  function toggleMulti(el, group) {
+    el.classList.toggle('selected');
+    clearErr('err-' + group);
+  }
+
+  function selectSingle(el, group) {
+    el.parentElement.querySelectorAll('.card-opt').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    clearErr('err-' + group);
+  }
+
+  function selectRadio(el, group) {
+    el.parentElement.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    clearErr('err-' + group);
+  }
+
+  function clearErr(id) {
+    const el = g(id);
+    if (el) el.classList.remove('show');
+  }
+
+  // ── Site toggle ───────────────────────────────────
+  function toggleSite(cb) {
+    const inp = g('site');
+    inp.disabled = cb.checked;
+    if (cb.checked) {
+      inp.value = '';
+      inp.classList.remove('has-error');
+      clearErr('err-site');
+    } else {
+      inp.focus();
+    }
+  }
+
+  // ── Phone mask ────────────────────────────────────
+  g('telefone').addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g,'').slice(0, 11);
+    if      (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+    else if (v.length > 6)  v = v.replace(/^(\d{2})(\d{4,5})(\d{0,4})$/, '($1) $2-$3');
+    else if (v.length > 2)  v = v.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
+    else if (v.length > 0)  v = '(' + v;
+    e.target.value = v;
+    if (v.replace(/\D/g,'').length >= 10) {
+      e.target.classList.remove('has-error');
+      clearErr('err-telefone');
+    }
+  });
+
+  // ── Build review ──────────────────────────────────
+  function buildReview() {
+    save(5);
+    const siteVal = s.semSite ? 'Ainda não tenho site' : (s.site || '—');
+    const cargoVal = s.cargo.length ? s.cargo.join(', ') : '—';
+
+    const fields = [
+      { l: 'Nome',       v: s.nome     || '—' },
+      { l: 'WhatsApp',   v: s.telefone || '—' },
+      { l: 'Empresa',    v: s.empresa  || '—' },
+      { l: 'Site',       v: siteVal },
+      { l: 'Cargo(s)',   v: cargoVal },
+      { l: 'Porte',      v: s.porte    || '—' },
+      { l: 'Solução',    v: s.solucao  || '—' },
+      { l: 'Urgência',   v: s.urgencia || '—' },
+      { l: 'Origem',     v: s.origem   || '—' },
+    ];
+
+    g('reviewGrid').innerHTML = fields.map(f => `
+      <div class="review-item">
+        <div class="review-lbl">${f.l}</div>
+        <div class="review-val">${f.v}</div>
+      </div>`).join('');
+  }
+
+  // ── WhatsApp ──────────────────────────────────────
+  function sendWhatsApp() {
+    // TODO: substituir pelo número real da GreatCase (somente dígitos, com DDI)
+    const phone = '5511999999999';
+    const siteDisplay = s.semSite ? 'Ainda não tenho site' : s.site;
+    const msg = encodeURIComponent(
+`🎯 *Diagnóstico Estratégico — GreatCase*
+
+👤 *Nome:* ${s.nome}
+📱 *WhatsApp:* ${s.telefone}
+🏢 *Empresa:* ${s.empresa}
+🌐 *Site:* ${siteDisplay}
+💼 *Cargo:* ${s.cargo.join(', ')}
+
+📊 *Porte:* ${s.porte}
+🚀 *Solução:* ${s.solucao}
+⚡ *Desafio:* ${s.desafio}
+⏰ *Urgência:* ${s.urgencia}
+📍 *Origem:* ${s.origem}`
+    );
+
+    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+
+    document.getElementById('step6').classList.remove('active');
+    document.getElementById('step7').classList.add('active');
+    setProgress(5);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Utils ─────────────────────────────────────────
+  function g(id)        { return document.getElementById(id); }
+  function qs(sel)      { return document.querySelector(sel); }
+  function qsa(sel)     { return document.querySelectorAll(sel); }
+
+  // Init
+  setProgress(1);
+</script>
+</body>
+</html>
