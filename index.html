@@ -748,7 +748,6 @@ if (TRACKING.metaPixel && TRACKING.pixelId !== 'SEU_PIXEL_ID_AQUI') {
 function trackEvent(eventName, params) {
   const payload = Object.assign({ event: eventName }, params || {});
   if (TRACKING.gtm) window.dataLayer.push(payload);
-  console.log('[GTM]', eventName, payload); // remover em produção
 }
 
 /* ── Constantes ─────────────────────────────── */
@@ -913,7 +912,7 @@ function enviar() {
   }
 
   const msg = '📋 *Diagnóstico Estratégico — GreatCase*\n\n'
-    + Object.entries(d).map(function([k,v]) { return '*' + k + ':* ' + v; }).join('\n');
+    + Object.entries(d).map(function(entry) { return '*' + entry[0] + ':* ' + entry[1]; }).join('\n');
   window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg), '_blank');
   goTo(7);
 }
