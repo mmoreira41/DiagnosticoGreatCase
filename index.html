@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+  <!-- End Google Tag Manager -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Diagnóstico Estratégico — GreatCase</title>
@@ -423,6 +430,10 @@
   </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 <div class="form-wrapper">
 
   <!-- Brand -->
@@ -744,6 +755,50 @@
 </div><!-- /form-wrapper -->
 
 <script>
+  // ── Analytics ─────────────────────────────────────
+  window.dataLayer = window.dataLayer || [];
+
+  const TRACKING = {
+    gtm:       true,   // Google Tag Manager ativo
+    metaPixel: false,  // Mude para true e defina pixelId se usar Meta Ads
+    pixelId:   'SEU_PIXEL_ID_AQUI',
+  };
+
+  if (TRACKING.metaPixel && TRACKING.pixelId !== 'SEU_PIXEL_ID_AQUI') {
+    !function(f,b,e,v,n,t,s){
+      if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window,document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', TRACKING.pixelId);
+    fbq('track', 'PageView');
+  }
+
+  /**
+   * Empurra um evento para o dataLayer do GTM.
+   * @param {string} eventName - Nome do evento (snake_case)
+   * @param {object} params    - Parâmetros adicionais do evento
+   */
+  function trackEvent(eventName, params) {
+    const payload = Object.assign({ event: eventName }, params || {});
+    if (TRACKING.gtm) window.dataLayer.push(payload);
+    // Debug — remover em produção
+    console.log('[GTM]', eventName, payload);
+  }
+
+  const STEP_NAMES = {
+    1: 'contato',
+    2: 'contexto_digital',
+    3: 'porte_empresa',
+    4: 'solucao_desafio',
+    5: 'urgencia_origem',
+    6: 'revisao',
+    7: 'confirmacao',
+  };
+  // ──────────────────────────────────────────────────
+
   // ── State ─────────────────────────────────────────
   const s = {
     nome: '', telefone: '', empresa: '',
@@ -765,6 +820,16 @@
   function goStep(from, to) {
     if (to > from && !validate(from)) return;
     save(from);
+
+    // Dispara evento de conclusão de passo ao avançar (passos 1–5)
+    if (to > from && from >= 1 && from <= 5) {
+      trackEvent('form_step_complete', {
+        step_number: from,
+        step_name:   STEP_NAMES[from] || 'desconhecido',
+        next_step:   to,
+      });
+    }
+
     if (to === 6) buildReview();
     document.getElementById('step' + from).classList.remove('active');
     document.getElementById('step' + to).classList.add('active');
@@ -908,8 +973,24 @@
   // ── WhatsApp ──────────────────────────────────────
   function sendWhatsApp() {
     // TODO: substituir pelo número real da GreatCase (somente dígitos, com DDI)
-    const phone = '5511999999999';
+    const phone = '5521964991907';
     const siteDisplay = s.semSite ? 'Ainda não tenho site' : s.site;
+
+    // ── Evento de conversão principal ──
+    trackEvent('form_submit', {
+      form_name:     'diagnostico_greatcase',
+      lead_cargo:    s.cargo.join(', '),
+      lead_porte:    s.porte,
+      lead_solucao:  s.solucao,
+      lead_urgencia: s.urgencia,
+      lead_origem:   s.origem,
+    });
+
+    // ── Meta Pixel: evento Lead ──
+    if (TRACKING.metaPixel && typeof fbq !== 'undefined') {
+      fbq('track', 'Lead', { content_name: 'diagnostico_greatcase' });
+    }
+
     const msg = encodeURIComponent(
 `🎯 *Diagnóstico Estratégico — GreatCase*
 
