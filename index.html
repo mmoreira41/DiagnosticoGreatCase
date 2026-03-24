@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 
 <!-- ══════════════════════════════════════════
-     1. HEAD: meta, fontes, GTM
+     1. HEAD: meta, fontes
      ══════════════════════════════════════════ -->
 <head>
   <meta charset="UTF-8" />
@@ -11,185 +11,231 @@
   <meta name="description" content="Descubra o posicionamento ideal para sua marca. Diagnóstico estratégico gratuito pela GreatCase." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Teachers:wght@400;600;700;800&display=swap" rel="stylesheet" />
 
 <!-- ══════════════════════════════════════════
-     2. CSS: design system + componentes
+     2. CSS: design system + layout
      ══════════════════════════════════════════ -->
 <style>
   /* ── Variáveis ─────────────────────────────── */
   :root {
     --blue:        #1E00FF;
-    --blue-hover:  #1600DD;
-    --blue-light:  rgba(30, 0, 255, 0.07);
-    --blue-border: rgba(30, 0, 255, 0.20);
-    --navy:        #080D1A;
-    --navy-2:      #0D1526;
+    --blue-dim:    rgba(30, 0, 255, 0.08);
+    --blue-border: rgba(30, 0, 255, 0.22);
+    --black:       #0B0B0B;
     --white:       #FFFFFF;
-    --gray-50:     #F8FAFC;
-    --gray-100:    #F1F5F9;
-    --gray-200:    #E2E8F0;
-    --gray-400:    #94A3B8;
-    --gray-600:    #475569;
-    --gray-900:    #0F172A;
-    --radius-sm:   8px;
-    --radius-md:   12px;
-    --radius-lg:   18px;
-    --shadow-card: 0 24px 64px rgba(0,0,0,0.28), 0 4px 16px rgba(0,0,0,0.12);
-    --font:        'Plus Jakarta Sans', sans-serif;
-    --transition:  0.18s ease;
+    --panel-r:     #F7F8FA;
+    --gray-100:    #F1F4F8;
+    --gray-200:    #E3E8EF;
+    --gray-400:    #97A3B4;
+    --gray-600:    #4A5568;
+    --font:        'Teachers', sans-serif;
+    --ease:        0.15s ease;
   }
 
   /* ── Reset ─────────────────────────────────── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
 
-  /* ── Page ──────────────────────────────────── */
   body {
     font-family: var(--font);
-    background: var(--navy);
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 48px 16px 72px;
-    background-image:
-      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(30,0,255,0.12) 0%, transparent 50%),
-      radial-gradient(ellipse 40% 30% at 80% 80%, rgba(30,0,255,0.08) 0%, transparent 50%);
-  }
-
-  /* ── Card principal ────────────────────────── */
-  .card {
-    width: 100%;
-    max-width: 480px;
     background: var(--white);
-    border-radius: 24px;
-    padding: 40px 36px 36px;
-    box-shadow: var(--shadow-card);
-    animation: cardIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
+    color: var(--black);
+    -webkit-font-smoothing: antialiased;
   }
 
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(24px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+  /* ══════════════════════════════════════════
+     LAYOUT: split screen
+     ══════════════════════════════════════════ */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
   }
 
-  /* ── Logo ──────────────────────────────────── */
+  /* ── Painel esquerdo: editorial fixo ────────── */
+  .panel-left {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    padding: 52px 60px;
+    background: var(--white);
+    border-right: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Logo */
   .logo {
     display: flex;
     align-items: center;
-    gap: 9px;
-    margin-bottom: 28px;
+    gap: 10px;
   }
   .logo-mark {
-    width: 32px;
-    height: 32px;
+    width: 32px; height: 32px;
     background: var(--blue);
-    border-radius: 8px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-mark svg { width: 17px; height: 17px; }
+  .logo-name {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--black);
+  }
+
+  /* Bloco central da headline */
+  .left-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+  .eyebrow {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 22px;
+  }
+
+  .headline {
+    font-size: clamp(48px, 5.4vw, 84px);
+    font-weight: 800;
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+    color: var(--black);
+    margin-bottom: 30px;
+  }
+  .headline .hi { color: var(--blue); }
+
+  .tagline {
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--gray-600);
+    line-height: 1.65;
+    max-width: 320px;
+    margin-bottom: 36px;
+  }
+
+  /* Benefits */
+  .benefits { display: flex; flex-direction: column; gap: 11px; }
+  .benefit {
+    display: flex; align-items: center; gap: 11px;
+    font-size: 13px; font-weight: 600; color: var(--gray-600);
+  }
+  .benefit::before {
+    content: '';
+    width: 5px; height: 5px;
+    background: var(--blue);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Footer do painel esquerdo */
+  .left-foot {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--gray-400);
+  }
+
+  /* ── Painel direito: formulário ─────────────── */
+  .panel-right {
+    background: var(--panel-r);
+    padding: 52px 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-  }
-  .logo-mark svg { width: 18px; height: 18px; }
-  .logo-name {
-    font-size: 15px;
-    font-weight: 800;
-    color: var(--gray-900);
-    letter-spacing: -0.02em;
+    min-height: 100vh;
   }
 
-  /* ── Progresso ─────────────────────────────── */
-  .progress-wrap { margin-bottom: 32px; }
-  .progress-bar {
-    display: flex;
-    gap: 5px;
+  .form-inner {
+    width: 100%;
+    max-width: 390px;
   }
+
+  /* ══════════════════════════════════════════
+     PROGRESSO
+     ══════════════════════════════════════════ */
+  .progress-wrap { margin-bottom: 38px; }
+  .progress-bar { display: flex; gap: 4px; }
   .progress-seg {
-    flex: 1;
-    height: 3px;
+    flex: 1; height: 2px;
     border-radius: 99px;
     background: var(--gray-200);
-    transition: background var(--transition);
+    transition: background 0.35s ease;
   }
   .progress-seg.active { background: var(--blue); }
   .progress-label {
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--gray-400);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
     margin-top: 10px;
   }
 
-  /* ── Step ──────────────────────────────────── */
+  /* ══════════════════════════════════════════
+     PASSOS
+     ══════════════════════════════════════════ */
   .step { display: none; }
   .step.active {
     display: block;
     animation: stepIn 0.22s ease both;
   }
   @keyframes stepIn {
-    from { opacity: 0; transform: translateX(8px); }
-    to   { opacity: 1; transform: translateX(0); }
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ── Step header ───────────────────────────── */
   .step-title {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--gray-900);
-    letter-spacing: -0.02em;
+    font-size: 21px; font-weight: 800;
+    letter-spacing: -0.025em;
     margin-bottom: 4px;
   }
   .step-sub {
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 13px; font-weight: 500;
     color: var(--gray-400);
-    margin-bottom: 22px;
+    margin-bottom: 24px;
     line-height: 1.5;
   }
   .q-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--gray-900);
+    font-size: 13px; font-weight: 700;
+    color: var(--black);
     text-align: center;
-    margin-bottom: 14px;
-    letter-spacing: -0.01em;
+    margin-bottom: 12px;
   }
 
-  /* ── Field ─────────────────────────────────── */
-  .field { margin-bottom: 16px; }
+  /* ══════════════════════════════════════════
+     CAMPOS
+     ══════════════════════════════════════════ */
+  .field { margin-bottom: 14px; }
   .field-label {
     display: block;
-    font-size: 10.5px;
-    font-weight: 700;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--gray-400);
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    margin-bottom: 7px;
+    margin-bottom: 6px;
   }
   .field input[type="text"],
   .field input[type="tel"],
   .field input[type="url"],
   .field select {
     width: 100%;
-    padding: 12px 14px;
-    background: var(--gray-50);
+    padding: 11px 14px;
+    background: var(--white);
     border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius-md);
+    border-radius: 8px;
     font-family: var(--font);
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--gray-900);
+    font-size: 14px; font-weight: 500;
+    color: var(--black);
     outline: none;
-    transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
-    -webkit-appearance: none;
-    appearance: none;
+    transition: border-color var(--ease), box-shadow var(--ease);
+    -webkit-appearance: none; appearance: none;
   }
   .field input:focus,
   .field select:focus {
     border-color: var(--blue);
-    background: var(--blue-light);
-    box-shadow: 0 0 0 3px rgba(30,0,255,0.10);
+    box-shadow: 0 0 0 3px var(--blue-dim);
   }
   .field input::placeholder { color: var(--gray-400); font-weight: 400; }
   .field input:disabled {
@@ -200,300 +246,236 @@
   }
   .field select {
     cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394A3B8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2397A3B4' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 14px center;
     padding-right: 36px;
   }
   .field-error {
-    font-size: 11.5px;
-    font-weight: 600;
+    font-size: 11px; font-weight: 600;
     color: #EF4444;
-    margin-top: 5px;
-    min-height: 16px;
+    margin-top: 4px;
+    min-height: 15px;
   }
 
-  /* ── Checkbox condicional ──────────────────── */
+  /* ── Checkbox ───────────────────────────────── */
   .check-row {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    margin-top: 9px;
-    cursor: pointer;
-    user-select: none;
+    display: flex; align-items: center; gap: 9px;
+    margin-top: 9px; cursor: pointer; user-select: none;
     width: fit-content;
     -webkit-tap-highlight-color: transparent;
   }
   .check-row input[type="checkbox"] { display: none; }
   .check-box {
-    width: 17px;
-    height: 17px;
+    width: 16px; height: 16px;
     border: 1.5px solid var(--gray-200);
-    border-radius: 4px;
-    background: var(--gray-50);
+    border-radius: 4px; background: var(--white);
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition);
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--ease);
   }
   .check-row input:checked ~ .check-box {
-    background: var(--blue);
-    border-color: var(--blue);
+    background: var(--blue); border-color: var(--blue);
   }
   .check-row input:checked ~ .check-box::after {
     content: '';
-    width: 4px;
-    height: 8px;
+    width: 3.5px; height: 7px;
     border: 1.5px solid white;
-    border-top: none;
-    border-left: none;
+    border-top: none; border-left: none;
     transform: rotate(44deg) translateY(-1px);
     display: block;
   }
-  .check-label {
-    font-size: 12.5px;
-    font-weight: 500;
-    color: var(--gray-600);
-  }
+  .check-label { font-size: 12.5px; font-weight: 500; color: var(--gray-600); }
 
-  /* ── Cards clicáveis ───────────────────────── */
-  .cards { display: flex; flex-direction: column; gap: 7px; }
-  .cards-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 7px;
-  }
+  /* ── Cards clicáveis ────────────────────────── */
+  .cards { display: flex; flex-direction: column; gap: 6px; }
+  .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 
   .card-opt {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    padding: 12px 14px;
-    background: var(--gray-50);
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 13px;
+    background: var(--white);
     border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius-sm);
+    border-radius: 8px;
     cursor: pointer;
-    transition: all var(--transition);
+    transition: border-color var(--ease), background var(--ease);
     user-select: none;
     -webkit-tap-highlight-color: transparent;
   }
   .card-opt:active { transform: scale(0.98); }
   .card-opt:hover {
-    border-color: rgba(30,0,255,0.30);
-    background: var(--blue-light);
+    border-color: var(--blue-border);
+    background: var(--blue-dim);
   }
   .card-opt.selected {
     border-color: var(--blue);
-    background: var(--blue-light);
+    background: var(--blue-dim);
   }
   .card-opt-label {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: var(--gray-900);
-    line-height: 1.3;
+    font-size: 13px; font-weight: 600;
+    color: var(--black); line-height: 1.3;
   }
+  .card-opt.selected .card-opt-label { color: var(--blue); }
 
   /* Indicador quadrado (multi) */
   .ind-sq {
-    width: 17px;
-    height: 17px;
+    width: 15px; height: 15px;
     border: 1.5px solid var(--gray-200);
-    border-radius: 4px;
-    background: var(--white);
+    border-radius: 3px; background: var(--white);
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition);
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--ease);
   }
-  .card-opt.selected .ind-sq {
-    background: var(--blue);
-    border-color: var(--blue);
-  }
+  .card-opt.selected .ind-sq { background: var(--blue); border-color: var(--blue); }
   .card-opt.selected .ind-sq::after {
     content: '';
-    width: 4px;
-    height: 8px;
+    width: 3.5px; height: 7px;
     border: 1.5px solid white;
-    border-top: none;
-    border-left: none;
+    border-top: none; border-left: none;
     transform: rotate(44deg) translateY(-1px);
     display: block;
   }
 
   /* Indicador circular (single) */
   .ind-ci {
-    width: 17px;
-    height: 17px;
+    width: 15px; height: 15px;
     border: 1.5px solid var(--gray-200);
-    border-radius: 50%;
-    background: var(--white);
+    border-radius: 50%; background: var(--white);
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition);
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--ease);
   }
-  .card-opt.selected .ind-ci {
-    border-color: var(--blue);
-  }
+  .card-opt.selected .ind-ci { border-color: var(--blue); }
   .card-opt.selected .ind-ci::after {
     content: '';
-    width: 7px;
-    height: 7px;
-    background: var(--blue);
-    border-radius: 50%;
+    width: 7px; height: 7px;
+    background: var(--blue); border-radius: 50%;
     display: block;
   }
 
-  /* ── Seção label ───────────────────────────── */
   .section-label {
-    font-size: 10.5px;
-    font-weight: 700;
-    color: var(--gray-400);
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    margin: 18px 0 10px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gray-400); margin: 16px 0 8px;
   }
 
-  /* ── Botões ────────────────────────────────── */
-  .btn-row {
-    display: flex;
-    gap: 8px;
-    margin-top: 24px;
-  }
+  /* ── Botões ─────────────────────────────────── */
+  .btn-row { display: flex; gap: 8px; margin-top: 22px; }
   .btn {
-    flex: 1;
-    padding: 13px 16px;
-    border-radius: var(--radius-md);
+    flex: 1; padding: 13px 16px;
+    border-radius: 8px;
     font-family: var(--font);
-    font-size: 12.5px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    cursor: pointer;
-    border: none;
-    transition: all var(--transition);
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    cursor: pointer; border: none;
+    transition: all var(--ease);
     -webkit-tap-highlight-color: transparent;
   }
   .btn-back {
     background: var(--white);
     border: 1.5px solid var(--gray-200);
     color: var(--gray-600);
-    flex: 0 0 auto;
-    padding: 13px 18px;
+    flex: 0 0 auto; padding: 13px 18px;
   }
-  .btn-back:hover { border-color: var(--gray-400); color: var(--gray-900); }
-  .btn-next {
-    background: var(--blue);
-    color: var(--white);
-    flex: 1;
-  }
+  .btn-back:hover { border-color: var(--gray-400); color: var(--black); }
+  .btn-next { background: var(--blue); color: var(--white); flex: 1; }
   .btn-next:hover {
-    background: var(--blue-hover);
-    box-shadow: 0 4px 16px rgba(30,0,255,0.35);
+    background: #1500DC;
+    box-shadow: 0 4px 16px rgba(30,0,255,0.30);
     transform: translateY(-1px);
   }
   .btn-next:active { transform: translateY(0); box-shadow: none; }
   .btn-full { width: 100%; flex: none; }
 
-  /* ── Bloco de revisão ──────────────────────── */
+  /* ── Revisão ────────────────────────────────── */
   .review-block {
-    background: var(--gray-50);
+    background: var(--white);
     border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius-lg);
+    border-radius: 10px;
     overflow: hidden;
   }
   .review-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--gray-900);
-    padding: 16px 18px 12px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gray-400);
+    padding: 13px 16px 10px;
     border-bottom: 1px solid var(--gray-200);
   }
   .review-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 10px 18px;
+    display: flex; justify-content: space-between;
+    align-items: flex-start; gap: 16px;
+    padding: 9px 16px;
     border-bottom: 1px solid var(--gray-200);
   }
   .review-row:last-child { border-bottom: none; }
   .review-key {
-    color: var(--gray-400);
-    font-weight: 600;
-    flex-shrink: 0;
-    font-size: 11.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding-top: 1px;
+    font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--gray-400); flex-shrink: 0; padding-top: 1px;
   }
   .review-val {
-    color: var(--gray-900);
-    font-weight: 700;
-    text-align: right;
-    font-size: 13px;
+    font-size: 12.5px; font-weight: 700;
+    color: var(--black); text-align: right;
   }
 
-  /* ── Confirmação ───────────────────────────── */
-  .confirm {
-    text-align: center;
-    padding: 8px 0 4px;
-  }
+  /* ── Confirmação ────────────────────────────── */
+  .confirm { text-align: center; padding: 12px 0 4px; }
   .confirm-icon {
-    width: 60px;
-    height: 60px;
-    background: var(--blue-light);
+    width: 56px; height: 56px;
+    background: var(--blue-dim);
     border: 1.5px solid var(--blue-border);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     margin: 0 auto 20px;
-    animation: popIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation: popIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
   }
   @keyframes popIn {
     from { opacity: 0; transform: scale(0.4); }
     to   { opacity: 1; transform: scale(1); }
   }
-  .confirm-icon svg { width: 26px; height: 26px; }
   .confirm-title {
-    font-size: 20px;
-    font-weight: 800;
-    color: var(--gray-900);
-    letter-spacing: -0.03em;
-    margin-bottom: 10px;
+    font-size: 22px; font-weight: 800;
+    letter-spacing: -0.025em; margin-bottom: 10px;
   }
   .confirm-text {
-    font-size: 13px;
-    color: var(--gray-400);
-    font-weight: 500;
-    line-height: 1.65;
-    margin-bottom: 22px;
-    max-width: 340px;
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 13px; font-weight: 500;
+    color: var(--gray-600); line-height: 1.65;
+    margin-bottom: 20px;
   }
   .confirm-card {
-    background: var(--blue-light);
+    background: var(--blue-dim);
     border: 1.5px solid var(--blue-border);
-    border-radius: var(--radius-md);
-    padding: 16px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--blue);
-    line-height: 1.6;
-    text-align: left;
+    border-radius: 8px; padding: 14px 16px;
+    font-size: 13px; font-weight: 600;
+    color: var(--blue); line-height: 1.6; text-align: left;
   }
 
-  /* ── Responsive ────────────────────────────── */
-  @media (max-width: 420px) {
-    body { padding: 24px 12px 60px; }
-    .card { padding: 28px 20px 24px; border-radius: 18px; }
+  /* ══════════════════════════════════════════
+     RESPONSIVE
+     ══════════════════════════════════════════ */
+  @media (max-width: 800px) {
+    .layout { grid-template-columns: 1fr; }
+
+    .panel-left {
+      position: static; height: auto;
+      padding: 28px 24px 24px;
+      border-right: none; border-bottom: 1px solid var(--gray-200);
+      flex-direction: row; align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .left-body, .left-foot { display: none; }
+
+    .panel-right {
+      padding: 32px 24px 56px;
+      min-height: 0; align-items: flex-start;
+    }
+    .form-inner { max-width: 100%; }
     .cards-grid { grid-template-columns: 1fr; }
-    .step-title { font-size: 16px; }
+  }
+
+  @media (max-width: 480px) {
+    .step-title { font-size: 18px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -503,204 +485,236 @@
 </head>
 
 <!-- ══════════════════════════════════════════
-     3. HTML — 7 passos dentro do card
+     3. HTML — layout dividido
      ══════════════════════════════════════════ -->
 <body>
+<div class="layout">
 
-<div class="card">
+  <!-- ═══════════════════════
+       Painel esquerdo: editorial
+       ═══════════════════════ -->
+  <div class="panel-left">
 
-  <!-- Logo -->
-  <div class="logo">
-    <div class="logo-mark">
-      <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 9L7.5 13.5L15 5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <span class="logo-name">GreatCase</span>
-  </div>
-
-  <!-- Barra de progresso -->
-  <div class="progress-wrap">
-    <div class="progress-bar">
-      <div class="progress-seg active" id="seg1"></div>
-      <div class="progress-seg" id="seg2"></div>
-      <div class="progress-seg" id="seg3"></div>
-      <div class="progress-seg" id="seg4"></div>
-      <div class="progress-seg" id="seg5"></div>
-    </div>
-    <div class="progress-label" id="progressLabel">Passo 1 de 5 — Contato</div>
-  </div>
-
-  <!-- ─── PASSO 1: Contato ─── -->
-  <div class="step active" id="step1">
-    <p class="step-title">Vamos começar</p>
-    <p class="step-sub">Informe seus dados de contato</p>
-
-    <div class="field">
-      <label class="field-label">Nome completo</label>
-      <input type="text" id="nome" placeholder="Seu nome completo" maxlength="120" autocomplete="name" />
-      <div class="field-error" id="erroNome"></div>
-    </div>
-
-    <div class="field">
-      <label class="field-label">Telefone / WhatsApp</label>
-      <input type="tel" id="telefone" placeholder="(00) 00000-0000" maxlength="15" autocomplete="tel" inputmode="numeric" />
-      <div class="field-error" id="erroTel"></div>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn btn-next btn-full" onclick="goTo(2)">Próximo passo →</button>
-    </div>
-  </div>
-
-  <!-- ─── PASSO 2: Contexto digital ─── -->
-  <div class="step" id="step2">
-    <p class="step-title">Contexto digital</p>
-    <p class="step-sub">Sobre sua presença online e seu cargo</p>
-
-    <div class="field">
-      <label class="field-label">Site da empresa</label>
-      <input type="url" id="site" placeholder="www.suaempresa.com.br" inputmode="url" />
-      <label class="check-row" for="semSite">
-        <input type="checkbox" id="semSite" onchange="toggleSite(this)" />
-        <span class="check-box"></span>
-        <span class="check-label">Ainda não tenho site</span>
-      </label>
-    </div>
-
-    <div class="field">
-      <label class="field-label">Qual o seu cargo atual?</label>
-      <div class="cards" id="cargoCards">
-        <div class="card-opt" onclick="toggleMulti(this)"><span class="ind-sq"></span><span class="card-opt-label">CEO</span></div>
-        <div class="card-opt" onclick="toggleMulti(this)"><span class="ind-sq"></span><span class="card-opt-label">Fundador</span></div>
-        <div class="card-opt" onclick="toggleMulti(this)"><span class="ind-sq"></span><span class="card-opt-label">Diretor</span></div>
-        <div class="card-opt" onclick="toggleMulti(this)"><span class="ind-sq"></span><span class="card-opt-label">Sócio</span></div>
-        <div class="card-opt" onclick="toggleMulti(this)"><span class="ind-sq"></span><span class="card-opt-label">Gerente de Marketing</span></div>
-      </div>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn btn-back" onclick="goTo(1)">← Voltar</button>
-      <button class="btn btn-next" onclick="goTo(3)">Próximo passo →</button>
-    </div>
-  </div>
-
-  <!-- ─── PASSO 3: Porte ─── -->
-  <div class="step" id="step3">
-    <p class="step-title">Porte da empresa</p>
-    <p class="step-sub">Selecione a faixa que melhor representa sua operação</p>
-
-    <div class="cards" id="porteCards">
-      <div class="card-opt" onclick="toggleSingle(this,'porteCards')"><span class="ind-ci"></span><span class="card-opt-label">MEI / Autônomo</span></div>
-      <div class="card-opt" onclick="toggleSingle(this,'porteCards')"><span class="ind-ci"></span><span class="card-opt-label">Microempresa (ME) — R$ 81 mil a R$ 360 mil/ano</span></div>
-      <div class="card-opt" onclick="toggleSingle(this,'porteCards')"><span class="ind-ci"></span><span class="card-opt-label">Empresa de Pequeno Porte (EPP) — até R$ 4,8 mi/ano</span></div>
-      <div class="card-opt" onclick="toggleSingle(this,'porteCards')"><span class="ind-ci"></span><span class="card-opt-label">Média Empresa — R$ 4,8 mi a R$ 300 mi/ano</span></div>
-      <div class="card-opt" onclick="toggleSingle(this,'porteCards')"><span class="ind-ci"></span><span class="card-opt-label">Grande Empresa — acima de R$ 300 mi</span></div>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn btn-back" onclick="goTo(2)">← Voltar</button>
-      <button class="btn btn-next" onclick="goTo(4)">Próximo passo →</button>
-    </div>
-  </div>
-
-  <!-- ─── PASSO 4: Solução e desafio ─── -->
-  <div class="step" id="step4">
-    <p class="step-title">Solução e desafio</p>
-    <p class="step-sub">O que você busca e o que trava seu crescimento</p>
-
-    <p class="q-title">Qual solução você busca agora?</p>
-    <div class="cards" id="solucaoCards">
-      <div class="card-opt" onclick="toggleSingle(this,'solucaoCards')"><span class="ind-ci"></span><span class="card-opt-label">Reposicionamento de Marca</span></div>
-      <div class="card-opt" onclick="toggleSingle(this,'solucaoCards')"><span class="ind-ci"></span><span class="card-opt-label">Rebranding Visual</span></div>
-      <div class="card-opt" onclick="toggleSingle(this,'solucaoCards')"><span class="ind-ci"></span><span class="card-opt-label">Diagnóstico de Posicionamento em Canais de Venda</span></div>
-    </div>
-
-    <div class="field" style="margin-top:18px;">
-      <label class="field-label">Qual o seu maior desafio hoje?</label>
-      <select id="desafio">
-        <option value="" disabled selected>Selecione uma opção...</option>
-        <option>Minha marca parece amadora</option>
-        <option>Ninguém entende o que fazemos</option>
-        <option>Quero cobrar mais caro pelo que entrego</option>
-        <option>Comunicação confusa nos canais</option>
-        <option>Dificuldade em escalar autoridade</option>
-      </select>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn btn-back" onclick="goTo(3)">← Voltar</button>
-      <button class="btn btn-next" onclick="goTo(5)">Próximo passo →</button>
-    </div>
-  </div>
-
-  <!-- ─── PASSO 5: Urgência e origem ─── -->
-  <div class="step" id="step5">
-    <p class="step-title">Urgência e origem</p>
-    <p class="step-sub">Quando quer iniciar e como chegou até nós</p>
-
-    <p class="q-title">Em quanto tempo quer iniciar?</p>
-    <div class="cards" id="urgenciaCards">
-      <div class="card-opt" onclick="toggleSingle(this,'urgenciaCards')"><span class="ind-ci"></span><span class="card-opt-label">Imediato — estou pronto</span></div>
-      <div class="card-opt" onclick="toggleSingle(this,'urgenciaCards')"><span class="ind-ci"></span><span class="card-opt-label">Em até 3 meses</span></div>
-      <div class="card-opt" onclick="toggleSingle(this,'urgenciaCards')"><span class="ind-ci"></span><span class="card-opt-label">Apenas estudando as possibilidades</span></div>
-    </div>
-
-    <p class="section-label">Como você conheceu a GreatCase?</p>
-    <div class="cards-grid" id="origemCards">
-      <div class="card-opt" onclick="toggleSingle(this,'origemCards')"><span class="ind-ci"></span><span class="card-opt-label">LinkedIn</span></div>
-      <div class="card-opt" onclick="toggleSingle(this,'origemCards')"><span class="ind-ci"></span><span class="card-opt-label">Instagram</span></div>
-      <div class="card-opt" onclick="toggleSingle(this,'origemCards')"><span class="ind-ci"></span><span class="card-opt-label">Indicação</span></div>
-      <div class="card-opt" onclick="toggleSingle(this,'origemCards')"><span class="ind-ci"></span><span class="card-opt-label">Google / Outros</span></div>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn btn-back" onclick="goTo(4)">← Voltar</button>
-      <button class="btn btn-next" onclick="goTo(6)">Revisar →</button>
-    </div>
-  </div>
-
-  <!-- ─── PASSO 6: Revisão ─── -->
-  <div class="step" id="step6">
-    <p class="step-title">Confirme seus dados</p>
-    <p class="step-sub">Tudo certo antes de enviar?</p>
-
-    <div class="review-block">
-      <div class="review-title">Resumo do diagnóstico</div>
-      <div class="review-row"><span class="review-key">Nome</span><span class="review-val" id="r-nome">—</span></div>
-      <div class="review-row"><span class="review-key">Telefone</span><span class="review-val" id="r-tel">—</span></div>
-      <div class="review-row"><span class="review-key">Site</span><span class="review-val" id="r-site">—</span></div>
-      <div class="review-row"><span class="review-key">Cargo</span><span class="review-val" id="r-cargo">—</span></div>
-      <div class="review-row"><span class="review-key">Porte</span><span class="review-val" id="r-porte">—</span></div>
-      <div class="review-row"><span class="review-key">Solução</span><span class="review-val" id="r-solucao">—</span></div>
-      <div class="review-row"><span class="review-key">Desafio</span><span class="review-val" id="r-desafio">—</span></div>
-      <div class="review-row"><span class="review-key">Urgência</span><span class="review-val" id="r-urgencia">—</span></div>
-      <div class="review-row"><span class="review-key">Origem</span><span class="review-val" id="r-origem">—</span></div>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn btn-back" onclick="goTo(5)">← Ajustar</button>
-      <button class="btn btn-next" onclick="enviar()">✓ Receber diagnóstico</button>
-    </div>
-  </div>
-
-  <!-- ─── PASSO 7: Confirmação ─── -->
-  <div class="step" id="step7">
-    <div class="confirm">
-      <div class="confirm-icon">
-        <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 13L10 19L22 7" stroke="#1E00FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Logo -->
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 18 18" fill="none">
+          <path d="M3 9L7.5 13.5L15 5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
-      <p class="confirm-title">Diagnóstico recebido!</p>
-      <p class="confirm-text">Seu perfil estratégico já está em nossas mãos. Nossa equipe vai analisar cada detalhe com cuidado.</p>
-      <div class="confirm-card">
-        📲 Fique atento ao seu celular — um dos nossos especialistas entrará em contato em breve para dar início à conversa sobre o reposicionamento da sua marca.
+      <span class="logo-name">GreatCase</span>
+    </div>
+
+    <!-- Headline editorial -->
+    <div class="left-body">
+      <p class="eyebrow">Diagnóstico Estratégico</p>
+      <h1 class="headline">
+        Queremos<br>
+        entender<br>
+        <span class="hi">sua marca.</span>
+      </h1>
+      <p class="tagline">Uma análise personalizada em 5 perguntas rápidas. Gratuita, sem compromisso.</p>
+      <div class="benefits">
+        <span class="benefit">Análise estratégica personalizada</span>
+        <span class="benefit">Proposta entregue em até 24h</span>
+        <span class="benefit">Sem compromisso</span>
       </div>
     </div>
+
+    <p class="left-foot">© GreatCase — Todos os direitos reservados</p>
   </div>
 
-</div><!-- /card -->
+  <!-- ═══════════════════════
+       Painel direito: formulário
+       ═══════════════════════ -->
+  <div class="panel-right">
+    <div class="form-inner">
+
+      <!-- Progresso -->
+      <div class="progress-wrap">
+        <div class="progress-bar">
+          <div class="progress-seg active" id="seg1"></div>
+          <div class="progress-seg" id="seg2"></div>
+          <div class="progress-seg" id="seg3"></div>
+          <div class="progress-seg" id="seg4"></div>
+          <div class="progress-seg" id="seg5"></div>
+        </div>
+        <div class="progress-label" id="progressLabel">Passo 1 de 5 — Contato</div>
+      </div>
+
+      <!-- ─── PASSO 1: Contato ─── -->
+      <div class="step active" id="step1">
+        <p class="step-title">Vamos começar</p>
+        <p class="step-sub">Informe seus dados de contato</p>
+
+        <div class="field">
+          <label class="field-label">Nome completo</label>
+          <input type="text" id="nome" placeholder="Seu nome completo" maxlength="120" autocomplete="name" />
+          <div class="field-error" id="erroNome"></div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Telefone / WhatsApp</label>
+          <input type="tel" id="telefone" placeholder="(00) 00000-0000" maxlength="15" autocomplete="tel" inputmode="numeric" />
+          <div class="field-error" id="erroTel"></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-next btn-full" onclick="goTo(2)">Próximo passo →</button>
+        </div>
+      </div>
+
+      <!-- ─── PASSO 2: Contexto digital ─── -->
+      <div class="step" id="step2">
+        <p class="step-title">Contexto digital</p>
+        <p class="step-sub">Sobre sua presença online e seu cargo</p>
+
+        <div class="field">
+          <label class="field-label">Site da empresa</label>
+          <input type="url" id="site" placeholder="www.suaempresa.com.br" inputmode="url" />
+          <label class="check-row" for="semSite">
+            <input type="checkbox" id="semSite" onchange="toggleSite(this)" />
+            <span class="check-box"></span>
+            <span class="check-label">Ainda não tenho site</span>
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Cargo atual</label>
+          <div class="cards" id="cargoCards">
+            <div class="card-opt" onclick="toggleMulti(this)"><span class="ind-sq"></span><span class="card-opt-label">CEO</span></div>
+            <div class="card-opt" onclick="toggleMulti(this)"><span class="ind-sq"></span><span class="card-opt-label">Fundador</span></div>
+            <div class="card-opt" onclick="toggleMulti(this)"><span class="ind-sq"></span><span class="card-opt-label">Diretor</span></div>
+            <div class="card-opt" onclick="toggleMulti(this)"><span class="ind-sq"></span><span class="card-opt-label">Sócio</span></div>
+            <div class="card-opt" onclick="toggleMulti(this)"><span class="ind-sq"></span><span class="card-opt-label">Gerente de Marketing</span></div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="goTo(1)">← Voltar</button>
+          <button class="btn btn-next" onclick="goTo(3)">Próximo →</button>
+        </div>
+      </div>
+
+      <!-- ─── PASSO 3: Porte ─── -->
+      <div class="step" id="step3">
+        <p class="step-title">Porte da empresa</p>
+        <p class="step-sub">Selecione a faixa que representa sua operação</p>
+
+        <div class="cards" id="porteCards">
+          <div class="card-opt" onclick="toggleSingle(this,'porteCards')"><span class="ind-ci"></span><span class="card-opt-label">MEI / Autônomo</span></div>
+          <div class="card-opt" onclick="toggleSingle(this,'porteCards')"><span class="ind-ci"></span><span class="card-opt-label">Microempresa (ME) — R$ 81 mil a R$ 360 mil/ano</span></div>
+          <div class="card-opt" onclick="toggleSingle(this,'porteCards')"><span class="ind-ci"></span><span class="card-opt-label">Empresa de Pequeno Porte (EPP) — até R$ 4,8 mi/ano</span></div>
+          <div class="card-opt" onclick="toggleSingle(this,'porteCards')"><span class="ind-ci"></span><span class="card-opt-label">Média Empresa — R$ 4,8 mi a R$ 300 mi/ano</span></div>
+          <div class="card-opt" onclick="toggleSingle(this,'porteCards')"><span class="ind-ci"></span><span class="card-opt-label">Grande Empresa — acima de R$ 300 mi</span></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="goTo(2)">← Voltar</button>
+          <button class="btn btn-next" onclick="goTo(4)">Próximo →</button>
+        </div>
+      </div>
+
+      <!-- ─── PASSO 4: Solução e desafio ─── -->
+      <div class="step" id="step4">
+        <p class="step-title">Solução e desafio</p>
+        <p class="step-sub">O que você busca e o que trava seu crescimento</p>
+
+        <p class="q-title">Qual solução você busca?</p>
+        <div class="cards" id="solucaoCards">
+          <div class="card-opt" onclick="toggleSingle(this,'solucaoCards')"><span class="ind-ci"></span><span class="card-opt-label">Reposicionamento de Marca</span></div>
+          <div class="card-opt" onclick="toggleSingle(this,'solucaoCards')"><span class="ind-ci"></span><span class="card-opt-label">Rebranding Visual</span></div>
+          <div class="card-opt" onclick="toggleSingle(this,'solucaoCards')"><span class="ind-ci"></span><span class="card-opt-label">Diagnóstico de Posicionamento em Canais de Venda</span></div>
+        </div>
+
+        <div class="field" style="margin-top:16px;">
+          <label class="field-label">Principal desafio</label>
+          <select id="desafio">
+            <option value="" disabled selected>Selecione uma opção...</option>
+            <option>Minha marca parece amadora</option>
+            <option>Ninguém entende o que fazemos</option>
+            <option>Quero cobrar mais caro pelo que entrego</option>
+            <option>Comunicação confusa nos canais</option>
+            <option>Dificuldade em escalar autoridade</option>
+          </select>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="goTo(3)">← Voltar</button>
+          <button class="btn btn-next" onclick="goTo(5)">Próximo →</button>
+        </div>
+      </div>
+
+      <!-- ─── PASSO 5: Urgência e origem ─── -->
+      <div class="step" id="step5">
+        <p class="step-title">Urgência e origem</p>
+        <p class="step-sub">Quando quer iniciar e como chegou até nós</p>
+
+        <p class="q-title">Em quanto tempo quer iniciar?</p>
+        <div class="cards" id="urgenciaCards">
+          <div class="card-opt" onclick="toggleSingle(this,'urgenciaCards')"><span class="ind-ci"></span><span class="card-opt-label">Imediato — estou pronto</span></div>
+          <div class="card-opt" onclick="toggleSingle(this,'urgenciaCards')"><span class="ind-ci"></span><span class="card-opt-label">Em até 3 meses</span></div>
+          <div class="card-opt" onclick="toggleSingle(this,'urgenciaCards')"><span class="ind-ci"></span><span class="card-opt-label">Apenas estudando as possibilidades</span></div>
+        </div>
+
+        <p class="section-label">Como você conheceu a GreatCase?</p>
+        <div class="cards-grid" id="origemCards">
+          <div class="card-opt" onclick="toggleSingle(this,'origemCards')"><span class="ind-ci"></span><span class="card-opt-label">LinkedIn</span></div>
+          <div class="card-opt" onclick="toggleSingle(this,'origemCards')"><span class="ind-ci"></span><span class="card-opt-label">Instagram</span></div>
+          <div class="card-opt" onclick="toggleSingle(this,'origemCards')"><span class="ind-ci"></span><span class="card-opt-label">Indicação</span></div>
+          <div class="card-opt" onclick="toggleSingle(this,'origemCards')"><span class="ind-ci"></span><span class="card-opt-label">Google / Outros</span></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="goTo(4)">← Voltar</button>
+          <button class="btn btn-next" onclick="goTo(6)">Revisar →</button>
+        </div>
+      </div>
+
+      <!-- ─── PASSO 6: Revisão ─── -->
+      <div class="step" id="step6">
+        <p class="step-title">Confirme seus dados</p>
+        <p class="step-sub">Tudo certo antes de enviar?</p>
+
+        <div class="review-block">
+          <div class="review-title">Resumo do diagnóstico</div>
+          <div class="review-row"><span class="review-key">Nome</span><span class="review-val" id="r-nome">—</span></div>
+          <div class="review-row"><span class="review-key">Telefone</span><span class="review-val" id="r-tel">—</span></div>
+          <div class="review-row"><span class="review-key">Site</span><span class="review-val" id="r-site">—</span></div>
+          <div class="review-row"><span class="review-key">Cargo</span><span class="review-val" id="r-cargo">—</span></div>
+          <div class="review-row"><span class="review-key">Porte</span><span class="review-val" id="r-porte">—</span></div>
+          <div class="review-row"><span class="review-key">Solução</span><span class="review-val" id="r-solucao">—</span></div>
+          <div class="review-row"><span class="review-key">Desafio</span><span class="review-val" id="r-desafio">—</span></div>
+          <div class="review-row"><span class="review-key">Urgência</span><span class="review-val" id="r-urgencia">—</span></div>
+          <div class="review-row"><span class="review-key">Origem</span><span class="review-val" id="r-origem">—</span></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="goTo(5)">← Ajustar</button>
+          <button class="btn btn-next" onclick="enviar()">✓ Receber diagnóstico</button>
+        </div>
+      </div>
+
+      <!-- ─── PASSO 7: Confirmação ─── -->
+      <div class="step" id="step7">
+        <div class="confirm">
+          <div class="confirm-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M4 12L9.5 17.5L20 7" stroke="#1E00FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <p class="confirm-title">Diagnóstico recebido!</p>
+          <p class="confirm-text">Seu perfil estratégico já está em nossas mãos. Nossa equipe analisa cada detalhe com cuidado.</p>
+          <div class="confirm-card">
+            📲 Fique atento ao celular — um especialista entrará em contato em breve para dar início à conversa sobre o reposicionamento da sua marca.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /form-inner -->
+  </div><!-- /panel-right -->
+
+</div><!-- /layout -->
 
 <!-- ══════════════════════════════════════════
      4. JS — Analytics · Estado · Validação · Envio
@@ -711,8 +725,8 @@
 window.dataLayer = window.dataLayer || [];
 
 const TRACKING = {
-  gtm:       true,   // Google Tag Manager ativo
-  metaPixel: false,  // Mude para true e defina pixelId se usar Meta Ads
+  gtm:       true,
+  metaPixel: false,
   pixelId:   'SEU_PIXEL_ID_AQUI',
 };
 
@@ -728,11 +742,6 @@ if (TRACKING.metaPixel && TRACKING.pixelId !== 'SEU_PIXEL_ID_AQUI') {
   fbq('track', 'PageView');
 }
 
-/**
- * Empurra um evento para o dataLayer do GTM.
- * @param {string} eventName - Nome do evento (snake_case)
- * @param {object} params    - Parâmetros adicionais
- */
 function trackEvent(eventName, params) {
   const payload = Object.assign({ event: eventName }, params || {});
   if (TRACKING.gtm) window.dataLayer.push(payload);
@@ -767,7 +776,6 @@ let currentStep = 1;
 function goTo(next) {
   if (next > currentStep && !validate(currentStep)) return;
 
-  // Dispara evento de conclusão de passo ao avançar (passos 1–5)
   if (next > currentStep && currentStep >= 1 && currentStep <= 5) {
     trackEvent('form_step_complete', {
       step_number: currentStep,
@@ -786,8 +794,8 @@ function goTo(next) {
 
 /* ── Progresso ──────────────────────────────── */
 function updateProgress(step) {
-  const active = Math.min(step, TOTAL_SEGS);
-  for (let i = 1; i <= TOTAL_SEGS; i++) {
+  var active = Math.min(step, TOTAL_SEGS);
+  for (var i = 1; i <= TOTAL_SEGS; i++) {
     document.getElementById('seg' + i).classList.toggle('active', i <= active);
   }
   document.getElementById('progressLabel').textContent = STEP_LABELS[step] || '';
@@ -796,30 +804,21 @@ function updateProgress(step) {
 /* ── Validação ──────────────────────────────── */
 function validate(step) {
   if (step !== 1) return true;
-
-  let ok = true;
-  const nome = document.getElementById('nome').value.trim();
-  const tel  = document.getElementById('telefone').value.replace(/\D/g, '');
-  const eNome = document.getElementById('erroNome');
-  const eTel  = document.getElementById('erroTel');
-
+  var ok = true;
+  var nome = document.getElementById('nome').value.trim();
+  var tel  = document.getElementById('telefone').value.replace(/\D/g, '');
+  var eNome = document.getElementById('erroNome');
+  var eTel  = document.getElementById('erroTel');
   eNome.textContent = '';
   eTel.textContent  = '';
-
-  if (nome.length < 3) {
-    eNome.textContent = 'Informe seu nome completo.';
-    ok = false;
-  }
-  if (tel.length < 10) {
-    eTel.textContent = 'Informe um telefone válido com DDD.';
-    ok = false;
-  }
+  if (nome.length < 3) { eNome.textContent = 'Informe seu nome completo.'; ok = false; }
+  if (tel.length < 10) { eTel.textContent  = 'Informe um telefone válido com DDD.'; ok = false; }
   return ok;
 }
 
 /* ── Máscara de telefone ────────────────────── */
 document.getElementById('telefone').addEventListener('input', function () {
-  let v = this.value.replace(/\D/g, '').slice(0, 11);
+  var v = this.value.replace(/\D/g, '').slice(0, 11);
   if      (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
   else if (v.length > 6)  v = v.replace(/^(\d{2})(\d{4,5})(\d*)$/, '($1) $2-$3');
   else if (v.length > 2)  v = v.replace(/^(\d{2})(\d*)$/, '($1) $2');
@@ -828,15 +827,13 @@ document.getElementById('telefone').addEventListener('input', function () {
 
 /* ── Toggle site ────────────────────────────── */
 function toggleSite(cb) {
-  const el = document.getElementById('site');
+  var el = document.getElementById('site');
   el.disabled = cb.checked;
   if (cb.checked) el.value = '';
 }
 
-/* ── Seleção múltipla (cargo) ───────────────── */
-function toggleMulti(el) {
-  el.classList.toggle('selected');
-}
+/* ── Seleção múltipla ───────────────────────── */
+function toggleMulti(el) { el.classList.toggle('selected'); }
 
 /* ── Seleção única ──────────────────────────── */
 function toggleSingle(el, containerId) {
@@ -847,32 +844,34 @@ function toggleSingle(el, containerId) {
 
 /* ── Helpers de leitura ─────────────────────── */
 function getMulti(containerId) {
-  const sel = document.querySelectorAll('#' + containerId + ' .card-opt.selected .card-opt-label');
-  return sel.length ? Array.from(sel).map(function(e) { return e.textContent; }).join(', ') : '—';
+  var sel = document.querySelectorAll('#' + containerId + ' .card-opt.selected .card-opt-label');
+  return sel.length
+    ? Array.from(sel).map(function(e) { return e.textContent; }).join(', ')
+    : '—';
 }
 function getSingle(containerId) {
-  const sel = document.querySelector('#' + containerId + ' .card-opt.selected .card-opt-label');
+  var sel = document.querySelector('#' + containerId + ' .card-opt.selected .card-opt-label');
   return sel ? sel.textContent : '—';
 }
 
 /* ── Preencher revisão ──────────────────────── */
 function fillReview() {
-  const semSite = document.getElementById('semSite').checked;
-  document.getElementById('r-nome').textContent    = document.getElementById('nome').value.trim() || '—';
-  document.getElementById('r-tel').textContent     = document.getElementById('telefone').value.trim() || '—';
-  document.getElementById('r-site').textContent    = semSite ? 'Ainda não tenho site' : (document.getElementById('site').value.trim() || '—');
-  document.getElementById('r-cargo').textContent   = getMulti('cargoCards');
-  document.getElementById('r-porte').textContent   = getSingle('porteCards');
-  document.getElementById('r-solucao').textContent = getSingle('solucaoCards');
-  document.getElementById('r-desafio').textContent = document.getElementById('desafio').value || '—';
+  var semSite = document.getElementById('semSite').checked;
+  document.getElementById('r-nome').textContent     = document.getElementById('nome').value.trim() || '—';
+  document.getElementById('r-tel').textContent      = document.getElementById('telefone').value.trim() || '—';
+  document.getElementById('r-site').textContent     = semSite ? 'Ainda não tenho site' : (document.getElementById('site').value.trim() || '—');
+  document.getElementById('r-cargo').textContent    = getMulti('cargoCards');
+  document.getElementById('r-porte').textContent    = getSingle('porteCards');
+  document.getElementById('r-solucao').textContent  = getSingle('solucaoCards');
+  document.getElementById('r-desafio').textContent  = document.getElementById('desafio').value || '—';
   document.getElementById('r-urgencia').textContent = getSingle('urgenciaCards');
-  document.getElementById('r-origem').textContent  = getSingle('origemCards');
+  document.getElementById('r-origem').textContent   = getSingle('origemCards');
 }
 
 /* ── Envio WhatsApp ─────────────────────────── */
 function enviar() {
-  const semSite = document.getElementById('semSite').checked;
-  const d = {
+  var semSite = document.getElementById('semSite').checked;
+  var d = {
     'Nome':     document.getElementById('nome').value.trim(),
     'Telefone': document.getElementById('telefone').value.trim(),
     'Site':     semSite ? 'Ainda não tenho site' : (document.getElementById('site').value.trim() || 'Não informado'),
@@ -884,7 +883,6 @@ function enviar() {
     'Origem':   getSingle('origemCards'),
   };
 
-  // ── Evento de conversão principal ──
   trackEvent('form_submit', {
     form_name:     'diagnostico_greatcase',
     lead_cargo:    d['Cargo'],
@@ -894,12 +892,11 @@ function enviar() {
     lead_origem:   d['Origem'],
   });
 
-  // ── Meta Pixel: evento Lead ──
   if (TRACKING.metaPixel && typeof fbq !== 'undefined') {
     fbq('track', 'Lead', { content_name: 'diagnostico_greatcase' });
   }
 
-  const msg = '📋 *Diagnóstico Estratégico — GreatCase*\n\n'
+  var msg = '📋 *Diagnóstico Estratégico — GreatCase*\n\n'
     + Object.entries(d).map(function(entry) { return '*' + entry[0] + ':* ' + entry[1]; }).join('\n');
   window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg), '_blank');
   goTo(7);
