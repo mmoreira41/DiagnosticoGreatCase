@@ -1,4 +1,4 @@
-# Coachly — CLAUDE.md
+/# Coachly — CLAUDE.md
 > Memória permanente do projeto. Lê este ficheiro antes de qualquer ação.
 
 ## O que é este projeto
